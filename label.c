@@ -1,5 +1,10 @@
 #include "label.h"
 
+void Green_InitializeLabel()
+{
+  label = malloc(sizeof (Green_Label));
+}
+
 void Green_SetLabelColor(Green_Label *label, Uint8 red, Uint8 green, Uint8 blue)
 {
   label->color.g = green;
@@ -50,6 +55,14 @@ bool Green_CheckLabel(Green_Label *label, SDL_Event *event)
     {
       return true;
     } else return false;
+}
+
+void Green_SetLabelEverything(Green_Label *label, int x, int y, int w, int h, int size, Uint8 red, Uint8 green, Uint8 blue, char *path, char *text)
+{
+  Green_SetLabelText(label, text);
+  Green_SetLabelPosition(label, x, y, w, h);
+  Green_SetLabelFont(label, size, path);
+  Green_SetLabelColor(label, red, green, blue);
 }
 
 void Green_CloseLabel(Green_Label *label)

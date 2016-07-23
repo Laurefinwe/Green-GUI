@@ -13,8 +13,10 @@ struct Green_Label
   char *text;
   char *path;
   SDL_Color color;
-};
+} Green_LabelDefault {.font = NULL, .size = 0, .x = 0, .y = 0, .w = 0, .h = 0, .text = NULL, .path = NULL, .color = 0};
 
 typedef struct Green_Label Green_Label;
+
+
 
 #endif
