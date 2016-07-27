@@ -1,6 +1,6 @@
 #include "label.h"
 
-void Green_InitializeLabel()
+void Green_InitializeLabel(Green_Label *label)
 {
   label = malloc(sizeof (Green_Label));
 }
@@ -65,7 +65,7 @@ void Green_SetLabelEverything(Green_Label *label, int x, int y, int w, int h, in
   Green_SetLabelColor(label, red, green, blue);
 }
 
-void Green_CloseLabel(Green_Label *label)
+void Green_FreeLabel(Green_Label *label)
 {
   TTF_CloseFont(label->font);
   free(label->path);

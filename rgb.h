@@ -3,7 +3,7 @@
 
 struct Green_RGB
 {
-  char r, g, b;
+  Uint8 red, green, blue;
 };
 
 typedef struct Green_RGB Green_RGB;
