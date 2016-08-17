@@ -3,23 +3,28 @@
 void Green_InitializeButton(Green_Button *button)
 {
   button = malloc(sizeof (Green_Button));
+  button->path = malloc(1024 * sizeof (char));
   //Green_InitilaizeLabel(button->label);
 }
 
-bool Green_CheckButtonMotion(Green_Button *button, SDL_Event *event)
+bool Green_CheckButton(Green_Button *button, SDL_Event *event)
 {
-  if (event->motion.x > button->x && event->motion.x < button->x + button->w && event->motion.y > button->y && event->motion.y < button->y + button->h)
+  switch (event->type)
     {
-      return true;
-    } else return false;
-}
+    case SDL_MOUSEBUTTONDOWN:
+      if (event->button.x > button->x && event->button.x < button->x + button->w && event->button.y > button->y && event->button.y < button->y + button->h)
+	{
+	  return true;
+	}
+      break;
 
-bool Green_CheckButtonClick(Green_Button *button, SDL_Event *event)
-{
-  if (event->button.x > button->x && event->button.x < button->x + button->w && event->button.y > button->y && event->button.y < button->y + button->h)
-    {
-      return true;
-    } else return false;
+    case SDL_MOUSEMOTION:
+      if (event->motion.x > button->x && event->motion.x < button->x + button->w && event->motion.y > button->y && event->motion.y < button->y + button->h)
+	{
+	  return true;
+	}
+    }
+  return false;
 }
 
 void Green_DrawButton(Green_Button *button, SDL_Surface *screen)
@@ -41,9 +46,13 @@ void Green_LoadButton(Green_Button *button, char *path, Uint8 red, Uint8 green, 
   if (path != NULL)
     {
       button->surface = IMG_Load(path);
-    } else
+      button->path = path;
+    } else if (screen != NULL)
     {
       SDL_FillRect(button->surface, 0, SDL_MapRGB(screen->format, red, green, blue));
+    } else
+    {
+      button->surface = IMG_Load(button->path);
     }
   button->w = button->surface->w;
   button->h = button->surface->h;

@@ -11,6 +11,7 @@ struct Green_Button
 {
   int x, y;
   int w, h;
+  char *path;
   SDL_Surface *surface;
 };
 
@@ -24,7 +25,6 @@ void Green_SetButtonEverything(Green_Button *button, int x, int y, char *path, U
 void Green_InitializeButton(Green_Button *button);
 void Green_FreeButton(Green_Button *button);
 void Green_DrawButton(Green_Button *button, SDL_Surface *screen);
-bool Green_CheckButtonMotion(Green_Button *button, SDL_Event *event);
-bool Green_CheckButtonClick(Green_Button *button, SDL_Event *event);
+bool Green_CheckButton(Green_Button *button, SDL_Event *event);
 
 #endif
