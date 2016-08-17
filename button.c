@@ -6,9 +6,17 @@ void Green_InitializeButton(Green_Button *button)
   //Green_InitilaizeLabel(button->label);
 }
 
-bool Green_CheckButton(Green_Button *button, SDL_Event *event)
+bool Green_CheckButtonMotion(Green_Button *button, SDL_Event *event)
 {
   if (event->motion.x > button->x && event->motion.x < button->x + button->w && event->motion.y > button->y && event->motion.y < button->y + button->h)
+    {
+      return true;
+    } else return false;
+}
+
+bool Green_CheckButtonClick(Green_Button *button, SDL_Event *event)
+{
+  if (event->button.x > button->x && event->button.x < button->x + button->w && event->button.y > button->y && event->button.y < button->y + button->h)
     {
       return true;
     } else return false;
