@@ -1,33 +1,36 @@
 #include "button.h"
 
-void Green_InitializeButton(Green_Button *button)
+int Green_InitializeButton(Green_Button *button)
 {
-  button = malloc(sizeof (Green_Button));
-  button->path = malloc(1024 * sizeof (char));
+  if ((button = malloc(sizeof (Green_Button))) == NULL)
+    return -1;
+  if ((button->path = malloc(1024 * sizeof (char))) == NULL)
+    return -2;
+  return 0;
   //Green_InitilaizeLabel(button->label);
 }
 
-bool Green_CheckButton(Green_Button *button, SDL_Event *event)
+int Green_CheckButton(Green_Button *button, SDL_Event *event)
 {
   switch (event->type)
     {
     case SDL_MOUSEBUTTONDOWN:
       if (event->button.x > button->x && event->button.x < button->x + button->w && event->button.y > button->y && event->button.y < button->y + button->h)
 	{
-	  return true;
+	  return 0;
 	}
       break;
 
     case SDL_MOUSEMOTION:
       if (event->motion.x > button->x && event->motion.x < button->x + button->w && event->motion.y > button->y && event->motion.y < button->y + button->h)
 	{
-	  return true;
+	  return 0;
 	}
     }
-  return false;
+  return -1;
 }
 
-void Green_DrawButton(Green_Button *button, SDL_Surface *screen)
+int Green_DrawButton(Green_Button *button, SDL_Surface *screen)
 { 
   SDL_Rect rect, button_rect;
   
@@ -38,24 +41,36 @@ void Green_DrawButton(Green_Button *button, SDL_Surface *screen)
 
   button_rect.x = button_rect.y = 0;
 
-  SDL_BlitSurface(button->surface, &button_rect, screen, &rect);
+  if (SDL_BlitSurface(button->surface, &button_rect, screen, &rect) != 0)
+    return -1;
+  return 0;
 }
 
-void Green_LoadButton(Green_Button *button, char *path, Uint8 red, Uint8 green, Uint8 blue, SDL_Surface *screen)
+int Green_LoadButton(Green_Button *button, char *path)
 {
   if (path != NULL)
     {
-      button->surface = IMG_Load(path);
+      if ((button->surface = IMG_Load(path)) == NULL)
+	return -1;
       button->path = path;
-    } else if (screen != NULL)
-    {
-      SDL_FillRect(button->surface, 0, SDL_MapRGB(screen->format, red, green, blue));
-    } else
-    {
-      button->surface = IMG_Load(button->path);
-    }
+    } else if (button->path != NULL)
+    if ((button->surface = IMG_Load(button->path)) == NULL)
+      return -1;
+  
   button->w = button->surface->w;
   button->h = button->surface->h;
+
+  return 0;
+}
+
+int Green_FillButton(Green_Button *button, Uint8 red, Uint8 green, Uint8 blue, Uint16 width, Uint16 height, SDL_Surface *screen)
+{
+  button->surface->w = width;
+  button->surface->h = height;
+  
+  if (SDL_FillRect(button->surface, 0, SDL_MapRGB(screen->format, red, green, blue)) != 0)
+    return -1;
+  return 0;
 }
 
 /*void Green_AddLabelToButton(Green_Button *button, Green_Label *label)
@@ -75,11 +90,16 @@ void Green_SetButtonXY(Green_Button *button, int x, int y)
   button->y = y;
 }
 
-void Green_SetButtonEverything(Green_Button *button, int x, int y, char *path, Uint8 red, Uint8 green, Uint8 blue, SDL_Surface *screen/*, Green_Label *label*/)
+int Green_SetButtonEverything(Green_Button *button, int x, int y, char *path)
 {
-  Green_InitializeButton(button);
-  Green_LoadButton(button, path, red, green, blue, screen);
+  if (Green_InitializeButton(button) != 0)
+    return -1;
+  
+  if (Green_LoadButton(button, path) != 0)
+    return -2;
+  
   Green_SetButtonXY(button, x, y);
+  return 0;
   //Green_Add_LabbelToButton(button, label);
 }
 
