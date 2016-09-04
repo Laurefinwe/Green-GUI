@@ -1,18 +1,19 @@
+#ifndef GREEN_BUTTON_H
+#define GREEN_BUTTON_H
+
 #include <stdbool.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 #include <SDL/SDL_image.h>
-//#include "label.h"
-
-#ifndef BUTTON_H
-#define BUTTON_H
+#include "surface.h"
 
 struct Green_Button
 {
   int x, y;
   int w, h;
+  int state;
   char *path;
-  SDL_Surface *surface;
+  Green_MultiSurface surface;
 };
 
 typedef struct Green_Button Green_Button;
